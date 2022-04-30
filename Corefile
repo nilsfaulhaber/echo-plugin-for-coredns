@@ -1,0 +1,12 @@
+membrain-it.technology:53 {
+    transfer {
+      to *
+    }
+    echoquada
+    errors
+    log
+}
+.:53 {
+    log
+    whoami
+}
