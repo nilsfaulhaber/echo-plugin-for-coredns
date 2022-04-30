@@ -9,7 +9,9 @@ import (
 	"strings"
 	"sync"
 	"time"
+	//
 	// ADD THIS LINE
+	//
 	"util"
 	"github.com/coredns/caddy"
 	"github.com/coredns/coredns/plugin"
@@ -109,11 +111,15 @@ var _ caddy.GracefulServer = &Server{}
 // This implements caddy.TCPServer interface.
 func (s *Server) Serve(l net.Listener) error {
 	s.m.Lock()
+	//
 	// CHANGE THIS LINE
+	//
 	s.server[tcp] = &dns.Server{Listener: l, Net: "tcp", MsgAcceptFunc: MyMsgAcceptFunc, Handler: dns.HandlerFunc(func(w dns.ResponseWriter, r *dns.Msg) {
 		ctx := context.WithValue(context.Background(), Key{}, s)
 		ctx = context.WithValue(ctx, LoopKey{}, 0)
+		//
 		// ADD THIS LINE
+		//
 		ctx = context.WithValue(ctx, util.CtxKey{}, "TCP")
 		s.ServeDNS(ctx, w, r)
 	})}
@@ -126,11 +132,15 @@ func (s *Server) Serve(l net.Listener) error {
 // This implements caddy.UDPServer interface.
 func (s *Server) ServePacket(p net.PacketConn) error {
 	s.m.Lock()
+	//
 	// CHANGE THIS LINE
+	//
 	s.server[udp] = &dns.Server{PacketConn: p, Net: "udp", MsgAcceptFunc: MyMsgAcceptFunc, Handler: dns.HandlerFunc(func(w dns.ResponseWriter, r *dns.Msg) {
 		ctx := context.WithValue(context.Background(), Key{}, s)
 		ctx = context.WithValue(ctx, LoopKey{}, 0)
+		//
 		// ADD THIS LINE
+		//
 		ctx = context.WithValue(ctx, util.CtxKey{}, "UDP")
 		s.ServeDNS(ctx, w, r)
 	})}
