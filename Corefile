@@ -1,10 +1,5 @@
 membrain-it.technology:53 {
-    transfer {
-      to *
-    }
-    echoquada
-    errors
-    log
+    echo
 }
 .:53 {
     log
