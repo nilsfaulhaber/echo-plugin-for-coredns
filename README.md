@@ -73,6 +73,7 @@ func assembleRR(data *queryData, protocol string) (dns.RR, error) {
 
 An example for a DNS message (sent over UDP, from localhost) and its encoding: 
 
+ **Original**
 ~~~~ Original
 ;; opcode: QUERY, status: NOERROR, id: 48286 
 ;; flags: rd ad; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
@@ -83,7 +84,7 @@ An example for a DNS message (sent over UDP, from localhost) and its encoding:
 ;;QUESTION SECTION:
 membrain-it.technology.		IN		A
 ~~~~
-
+ **Encoding**
 ~~~~ Encoding
 FROM_127.0.0.1 
 Protocol_UDP 
@@ -95,5 +96,32 @@ QUESTION&SECTION:$%membrain-it.technology.?IN?&A$
 ~~~~
 
 
-the used transport protocol, we need to make some small adjustments in the original CoreDNS code in . When requests over one protocol are received, this information is stored using context-variables. As a reference, the file has been added to the repository of echo and the respective changes have been marked. It is also necessary to add the the module util.go to the go-source /usr/local/go/src. As we have furthermore observed during tests that DNS messages containing specific EDNS options (like TCP Keepalive) were blocked by the CoreDNS server, we additionally added a custom MsgAcceptFunc to leave all requests through to the plugins. It can also be found the repository and needs to be added to the CoreDNS folder coredns/core/dnsserver/. Some additional changes in server.go are again highlighted.
-To be able to run the plugins, their folders need to be pasted into coredns/plugin and their names registered in coredns/plugin.cfg (also listed in the repository). Finally, the usage of either of the plugins needs to be configured in the Corefile. An example can be found in each repository. After building, the respective name servers running the plugins can be deployed using systemd following the instructions given in [111].
+# Plugging it together
+Follow this step by step guide to create a CoreDNS server running the echo plugin. 
+
+1. Clone this repository 
+2. Clone the [CoreDNS repository](https://github.com/coredns/coredns)
+3. Add module **util.go** to go source 
+Copy the module util.go to /usr/local/go/src/
+4. Add mymsgacceptfunc.go to the coredns folder: _coredns/core/dnsserver/_
+5. Replace the orginal file _server.go_ in _coredns/core/dnsserver/_ with the one from this repository or apply the highlighted changes to the original file
+6. Create a folder _echo_ in _coredns/plugin/_.
+7. Copy the files _echo.go_, _metrics.go_ and _setup.go_ the _coredns/plugin/echo_
+8. Replace the file _coredns/plugin.cfg_ with the one in this repository or apply the highlighted changes
+9. Build everything by running 
+~~~~
+make
+~~~~~
+in _coredns/_
+The output is an executable file _coredns_ that can be deployed. 
+
+
+Finally, create a Corefile similar to the one in this respository and place it into _coredns/_. 
+~~~~
+membrain-it.technology:53 {
+    echo
+}
+~~~~
+Make sure to replace _membrain-it.technology_ with the zone your name server is authoritative for. 
+
+Follow one of the procedures listed [here](https://github.com/coredns/deployment) to deploy the server and to specify the configuration with the Corefile. 
