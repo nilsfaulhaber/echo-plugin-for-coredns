@@ -13,7 +13,7 @@ To realize the retieval of the transport protocol, the module _util.go_ needs to
 ~~~
 s.server[tcp] = &dns.Server{Listener: l, Net: "tcp", MsgAcceptFunc: MyMsgAcceptFunc, Handler: dns.HandlerFunc(func(w dns.ResponseWriter, r *dns.Msg) {
 		...
-**		ctx = context.WithValue(ctx, util.CtxKey{}, "TCP")**
+		ctx = context.WithValue(ctx, util.CtxKey{}, "TCP")
 		s.ServeDNS(ctx, w, r)
 	})}
 
@@ -23,7 +23,7 @@ s.server[tcp] = &dns.Server{Listener: l, Net: "tcp", MsgAcceptFunc: MyMsgAcceptF
 ~~~
 s.server[udp] = &dns.Server{PacketConn: p, Net: "udp", MsgAcceptFunc: **MyMsgAcceptFunc**, Handler: dns.HandlerFunc(func(w dns.ResponseWriter, r *dns.Msg) {
 		...
-**		ctx = context.WithValue(ctx, util.CtxKey{}, "UDP")**
+		ctx = context.WithValue(ctx, util.CtxKey{}, "UDP")
 		s.ServeDNS(ctx, w, r)
 	})}
 ~~~
