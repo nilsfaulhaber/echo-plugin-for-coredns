@@ -72,8 +72,8 @@ func assembleRR(data *queryData, protocol string) (dns.RR, error) {
 ~~~
 
 An example for a DNS message (sent over UDP, from localhost) and its encoding: 
-**Original**
-~~~~
+
+~~~~ Original
 ;; opcode: QUERY, status: NOERROR, id: 48286 
 ;; flags: rd ad; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
 
@@ -83,8 +83,8 @@ An example for a DNS message (sent over UDP, from localhost) and its encoding:
 ;;QUESTION SECTION:
 membrain-it.technology.		IN		A
 ~~~~
-**Encoding**
-~~~~
+
+~~~~ Encoding
 FROM_127.0.0.1 
 Protocol_UDP 
 opcode:&QUERY,&status:&NOERROR,&id:&48286$
