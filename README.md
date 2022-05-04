@@ -11,15 +11,12 @@ To realize the retieval of the transport protocol, the module _util.go_ needs to
 
 ### Serve
 ~~~
-<pre>
-
-s.server[tcp] = &dns.Server{Listener: l, Net: "tcp", MsgAcceptFunc: <b>MyMsgAcceptFunc</b>, Handler: dns.HandlerFunc(func(w dns.ResponseWriter, r *dns.Msg) {
+s.server[tcp] = &dns.Server{Listener: l, Net: "tcp", MsgAcceptFunc: MyMsgAcceptFunc, Handler: dns.HandlerFunc(func(w dns.ResponseWriter, r *dns.Msg) {
 		...
 **		ctx = context.WithValue(ctx, util.CtxKey{}, "TCP")**
 		s.ServeDNS(ctx, w, r)
 	})}
-	
-</pre>
+
 ~~~
 
 ### ServePacket
@@ -33,21 +30,21 @@ s.server[udp] = &dns.Server{PacketConn: p, Net: "udp", MsgAcceptFunc: **MyMsgAcc
 Note that we have notice during tests that some requests using specific EDNS(0) Options were blocked by CoreDNS. Therefore, an own _MsgAcceptFunc_, **MyMsgAcceptFunc** was introduced to leave all request through to the plugin. In the **ServeDNS** (see echo.go) function, _echo_ firstly retrieves the transport protocol the request was sent over using the **context-variable (ctx)** passed as parameter: 
 
 ~~~
-	protocol, _ := util.GetProtocolFromContext(ctx)
+protocol, _ := util.GetProtocolFromContext(ctx)
 ~~~
 
 
 ## Retreiving Request Data 
 The remaining data from the incoming request is as well taken from **ctx**: 
 ~~~
-**data := getData(ctx, state)**
+data := getData(ctx, state)
 
 msg := new(dns.Msg)
 msg.SetReply(r)
 msg.Authoritative = true
 msg.Rcode = dns.RcodeSuccess
 
-**rr, err := assembleRR(data, protocol)**
+rr, err := assembleRR(data, protocol)
 ~~~
 
 The body of the response message is filled by Resource Record returned from **assembleRR**.
