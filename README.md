@@ -11,11 +11,15 @@ To realize the retieval of the transport protocol, the module _util.go_ needs to
 
 ### Serve
 ~~~
-s.server[tcp] = &dns.Server{Listener: l, Net: "tcp", MsgAcceptFunc: **MyMsgAcceptFunc**, Handler: dns.HandlerFunc(func(w dns.ResponseWriter, r *dns.Msg) {
+<pre>
+
+s.server[tcp] = &dns.Server{Listener: l, Net: "tcp", MsgAcceptFunc: <b>MyMsgAcceptFunc</b>, Handler: dns.HandlerFunc(func(w dns.ResponseWriter, r *dns.Msg) {
 		...
 **		ctx = context.WithValue(ctx, util.CtxKey{}, "TCP")**
 		s.ServeDNS(ctx, w, r)
 	})}
+	
+</pre>
 ~~~
 
 ### ServePacket
