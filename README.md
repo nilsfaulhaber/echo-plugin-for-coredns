@@ -35,7 +35,7 @@ protocol, _ := util.GetProtocolFromContext(ctx)
 
 
 ## Retreiving Request Data 
-The remaining data from the incoming request is as well taken from **ctx**: 
+The remaining data from the incoming request is as well taken from **ctx** in **ServerDNS**: 
 ~~~
 data := getData(ctx, state)
 
