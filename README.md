@@ -124,4 +124,4 @@ membrain-it.technology:53 {
 ~~~~
 Make sure to replace _membrain-it.technology_ with the zone your name server is authoritative for. 
 
-Follow one of the procedures listed [here](https://github.com/coredns/deployment) to deploy the server and to specify the configuration with the Corefile. 
+Follow one of the procedures listed [here](https://github.com/coredns/deployment) to deploy the server and to specify the configuration with the Corefile. We have chosen to deploy the service using **systemd** which worked perfectly fine. 
